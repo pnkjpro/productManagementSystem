@@ -5,11 +5,16 @@ use App\Models\Product;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Inertia\Inertia;
 
 class ProductController extends Controller
 {
     public function index(){
-        return Product::paginate(10); // Fetch paginated products
+        return Inertia::render('Index');
+    }
+    public function fetchProducts(){
+        $products = Product::paginate(10); // Fetch paginated products
+        return response()->json($products);
     }
 
     public function store(Request $request){
@@ -23,7 +28,7 @@ class ProductController extends Controller
 
         $path = $request->file('image')?->store('images', 'public');
 
-        $product = Product::create(array_merge($validated, ['image' => $path]));
+        $product = Product::updateOrCreate(array_merge($validated, ['image' => $path]));
         return  response()->json($product, 201);
     }
 
