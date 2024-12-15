@@ -518,23 +518,10 @@ const createOrUpdateProduct = () => {
         toast.error("Please fix the form errors");
         return;
     }
-
-    // Create a new FormData object
-    const formData = new FormData();
-
-    // Append form data
-    formData.append("name", form.value.name);
-    formData.append("description", form.value.description);
-    formData.append("price", form.value.price);
-    formData.append("stock", form.value.stock);
-    if (form.value.image) {
-        formData.append("image", form.value.image); // Only append if image is present
-    }
-
     try {
         if (form.value.id) {
             axios
-                .post(`/products/${form.value.id}`, formData)
+                .put(`/products/${form.value.id}`, form.value)
                 .then((response) => {
                     toast.success("Product Updated Successfully!");
                     console.log(response);
