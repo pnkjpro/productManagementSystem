@@ -155,6 +155,106 @@
                                 @submit.prevent="createOrUpdateProduct"
                                 class="space-y-6"
                             >
+                                <!-- File Upload Input -->
+                                <div class="space-y-2">
+                                    <label
+                                        for="product_image"
+                                        class="block text-sm font-medium text-gray-700"
+                                    >
+                                        Product Image
+                                    </label>
+                                    <div class="flex items-center gap-4">
+                                        <!-- Image Preview -->
+                                        <div
+                                            v-if="imagePreview"
+                                            class="relative w-24 h-24 rounded-lg overflow-hidden border border-gray-300"
+                                        >
+                                            <img
+                                                :src="imagePreview"
+                                                class="w-full h-full object-cover"
+                                                alt="Product preview"
+                                            />
+                                            <button
+                                                @click="clearImage"
+                                                type="button"
+                                                class="absolute top-1 right-1 p-1 bg-white rounded-full shadow-sm hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                            >
+                                                <span class="sr-only"
+                                                    >Remove image</span
+                                                >
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    class="h-4 w-4 text-gray-500"
+                                                    fill="none"
+                                                    viewBox="0 0 24 24"
+                                                    stroke="currentColor"
+                                                >
+                                                    <path
+                                                        stroke-linecap="round"
+                                                        stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M6 18L18 6M6 6l12 12"
+                                                    />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                        <!-- Upload Input -->
+                                        <div class="flex-1">
+                                            <label
+                                                for="product_image"
+                                                class="flex justify-center px-6 py-4 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer hover:border-indigo-500 transition-colors"
+                                            >
+                                                <div
+                                                    class="space-y-1 text-center"
+                                                >
+                                                    <svg
+                                                        class="mx-auto h-12 w-12 text-gray-400"
+                                                        stroke="currentColor"
+                                                        fill="none"
+                                                        viewBox="0 0 48 48"
+                                                        aria-hidden="true"
+                                                    >
+                                                        <path
+                                                            d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
+                                                            stroke-width="2"
+                                                            stroke-linecap="round"
+                                                            stroke-linejoin="round"
+                                                        />
+                                                    </svg>
+                                                    <div
+                                                        class="text-sm text-gray-600"
+                                                    >
+                                                        <span
+                                                            class="font-medium text-indigo-600 hover:text-indigo-500"
+                                                        >
+                                                            Click to upload
+                                                        </span>
+                                                        or drag and drop
+                                                    </div>
+                                                    <p
+                                                        class="text-xs text-gray-500"
+                                                    >
+                                                        PNG, JPG, GIF up to 10MB
+                                                    </p>
+                                                </div>
+                                                <input
+                                                    @change="handleImageUpload"
+                                                    id="product_image"
+                                                    name="product_image"
+                                                    type="file"
+                                                    accept="image/*"
+                                                    class="sr-only"
+                                                />
+                                            </label>
+                                            <p
+                                                v-if="errors.image"
+                                                class="mt-2 text-sm text-red-600"
+                                            >
+                                                {{ errors.image }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
                                 <!-- Product Name -->
                                 <div class="space-y-2">
                                     <label
@@ -170,6 +270,12 @@
                                         placeholder="Enter product name"
                                         class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors"
                                     />
+                                    <p
+                                        v-if="errors.name"
+                                        class="mt-2 text-sm text-red-600"
+                                    >
+                                        {{ errors.name }}
+                                    </p>
                                 </div>
 
                                 <!-- Description - Now a textarea -->
@@ -187,6 +293,12 @@
                                         placeholder="Provide a detailed description of your product"
                                         class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors"
                                     ></textarea>
+                                    <p
+                                        v-if="errors.description"
+                                        class="mt-2 text-sm text-red-600"
+                                    >
+                                        {{ errors.description }}
+                                    </p>
                                 </div>
 
                                 <!-- Price with currency symbol -->
@@ -215,6 +327,12 @@
                                             class="w-full rounded-lg border-gray-300 pl-7 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors"
                                         />
                                     </div>
+                                    <p
+                                        v-if="errors.price"
+                                        class="mt-2 text-sm text-red-600"
+                                    >
+                                        {{ errors.price }}
+                                    </p>
                                 </div>
 
                                 <!-- Stock with number input -->
@@ -235,6 +353,12 @@
                                             class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors"
                                         />
                                     </div>
+                                    <p
+                                        v-if="errors.stock"
+                                        class="mt-2 text-sm text-red-600"
+                                    >
+                                        {{ errors.stock }}
+                                    </p>
                                 </div>
 
                                 <!-- Action Buttons with improved styling -->
@@ -249,7 +373,7 @@
                                         Cancel
                                     </button>
                                     <button
-                                        @click="createOrUpdateProduct"
+                                        type="submit"
                                         class="px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-indigo-600 to-purple-600 rounded-lg hover:from-indigo-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all transform hover:scale-105"
                                     >
                                         {{ modalTitle }} Product
@@ -265,7 +389,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch, computed } from "vue";
+import { ref, onMounted, watch, computed, onBeforeUnmount } from "vue";
 import { useToast } from "vue-toastification";
 import { usePage, router, Link } from "@inertiajs/vue3";
 import axios from "axios";
@@ -275,23 +399,57 @@ const products = ref([]);
 const showCreateProductModal = ref(false);
 const modalTitle = ref("");
 const toast = useToast();
+const errors = ref({});
+const imagePreview = ref(null);
 const initial_form = {
     name: "",
     description: "",
     price: 0,
     stock: 0,
+    image: null,
 };
 const form = ref(initial_form);
 
+// Image preview state
+
+// Image upload handler
+const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+        form.value.image = file;
+        imagePreview.value = URL.createObjectURL(file);
+
+        delete errors.value.image;
+    }
+};
+
+// Clear image
+const clearImage = () => {
+    form.value.image = null;
+    imagePreview.value = null;
+    delete errors.value.image;
+    // Reset the file input
+    const fileInput = document.getElementById("product_image");
+    if (fileInput) fileInput.value = "";
+};
+
+// Cleanup object URL on component unmount
+onBeforeUnmount(() => {
+    if (imagePreview.value) {
+        URL.revokeObjectURL(imagePreview.value);
+    }
+});
+
 const createProduct = () => {
     form.value = initial_form;
+    errors.value = {};
     showCreateProductModal.value = true;
     modalTitle.value = "Create";
 };
 
 const editProduct = (product) => {
-    // form.value = initial_form;
     form.value = product;
+    errors.value = {};
     modalTitle.value = "Edit";
     showCreateProductModal.value = true;
 };
@@ -303,33 +461,101 @@ const fetchProducts = () => {
     });
 };
 
+const validateForm = () => {
+    const newErrors = {};
+
+    // name validation
+    if (!form.value.name) {
+        newErrors.name = "Product name is required";
+    } else if (form.value.name.length > 255) {
+        newErrors.name = "Product name must be less than 255 characters";
+    }
+
+    // description validation
+    if (!form.value.description && typeof form.value.description !== "string") {
+        newErrors.description = "Description must be text";
+    }
+
+    // price validation
+    if (!form.value.price) {
+        newErrors.price = "Price is required";
+    } else if (isNaN(Number(form.value.price))) {
+        newErrors.price = "Price must be a number";
+    } else if (Number(form.value.price) < 0) {
+        newErrors.price = "Price cannot be negative";
+    }
+
+    // stock validation
+    if (!form.value.stock) {
+        newErrors.stock = "Stock quantity is required";
+    } else if (!Number.isInteger(Number(form.value.stock))) {
+        newErrors.stock = "Stock must be a whole number";
+    } else if (Number(form.value.stock) < 0) {
+        newErrors.stock = "Stock cannot be negative";
+    }
+
+    // image validation
+    if (form.value.image) {
+        const validTypes = [
+            "image/jpeg",
+            "image/png",
+            "image/gif",
+            "image/jpg",
+        ];
+        if (!validTypes.includes(form.value.image.type)) {
+            newErrors.image =
+                "Please upload a valid image file (JPEG, PNG, GIF, JPG)";
+        } else if (form.value.image.size > 2 * 1024 * 1024) {
+            newErrors.image = "Image size must be less than 2MB";
+        }
+    }
+
+    errors.value = newErrors;
+    return Object.keys(newErrors).length === 0;
+};
+
 const createOrUpdateProduct = () => {
-    if (form.value.id) {
-        axios
-            .put(`/products/${form.value.id}`, form.value)
-            .then((response) => {
-                toast.success("Product Updated Successfully!");
-                console.log(response);
-                fetchProducts();
-            })
-            .catch((err) => {
-                toast.error("Error Updating Product");
-                console.log("Error Updating Product", err);
-            })
-            .finally((showCreateProductModal.value = false));
-    } else {
-        axios
-            .post(`/products`, form.value)
-            .then((response) => {
-                toast.success("Product Created Successfully!");
-                console.log(response);
-                fetchProducts();
-            })
-            .catch((err) => {
-                toast.error("Error creating Product");
-                console.log("Error creating Product", err);
-            })
-            .finally((showCreateProductModal.value = false));
+    //validate form before submission
+    if (!validateForm()) {
+        toast.error("Please fix the form errors");
+        return;
+    }
+    try {
+        if (form.value.id) {
+            axios
+                .put(`/products/${form.value.id}`, form.value)
+                .then((response) => {
+                    toast.success("Product Updated Successfully!");
+                    console.log(response);
+                    fetchProducts();
+                })
+                .catch((err) => {
+                    toast.error("Error Updating Product");
+                    console.log("Error Updating Product", err);
+                })
+                .finally((showCreateProductModal.value = false));
+        } else {
+            axios
+                .post(`/products`, form.value)
+                .then((response) => {
+                    toast.success("Product Created Successfully!");
+                    console.log(response);
+                    fetchProducts();
+                })
+                .catch((err) => {
+                    toast.error("Error creating Product");
+                    console.log("Error creating Product", err);
+                })
+                .finally((showCreateProductModal.value = false));
+        }
+    } catch (error) {
+        // handle validation errors from the server
+        if (error.response?.data?.errors) {
+            errors.value = error.response.data.errors;
+            toast.error("Please fix the form errors");
+        } else {
+            toast.error(error.response?.data?.message || "An error occurred");
+        }
     }
 };
 
