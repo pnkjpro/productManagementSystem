@@ -392,7 +392,6 @@
 <script setup>
 import { ref, onMounted, watch, computed, onBeforeUnmount } from "vue";
 import { useToast } from "vue-toastification";
-import { usePage, router, Link } from "@inertiajs/vue3";
 import axios from "axios";
 
 // Reactive state to hold products
@@ -518,10 +517,23 @@ const createOrUpdateProduct = () => {
         toast.error("Please fix the form errors");
         return;
     }
+
+    // Create a new FormData object
+    const formData = new FormData();
+
+    // Append form data
+    formData.append("name", form.value.name);
+    formData.append("description", form.value.description);
+    formData.append("price", form.value.price);
+    formData.append("stock", form.value.stock);
+    if (form.value.image) {
+        formData.append("image", form.value.image);
+    }
+
     try {
         if (form.value.id) {
             axios
-                .put(`/products/${form.value.id}`, form.value)
+                .post(`/products/${form.value.id}`, formData)
                 .then((response) => {
                     toast.success("Product Updated Successfully!");
                     console.log(response);

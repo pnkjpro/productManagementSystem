@@ -13,7 +13,7 @@ class ProductController extends Controller
         return Inertia::render('Index');
     }
     public function fetchProducts(){
-        $products = Product::paginate(10); // Fetch paginated products
+        $products = Product::paginate(3);
         return response()->json($products);
     }
 
