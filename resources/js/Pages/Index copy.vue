@@ -1,121 +1,232 @@
 <template>
-    <div class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-7xl mx-auto">
-        <!-- Header -->
-        <div class="sm:flex sm:items-center mb-8">
-            <div class="sm:flex-auto">
-                <h1 class="text-2xl font-semibold text-gray-900">Products</h1>
-                <p class="mt-2 text-sm text-gray-700">
-                    A list of all products in your inventory including their
-                    name, price, and current stock levels.
-                </p>
+    <AuthenticatedLayout>
+        <div class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-7xl mx-auto">
+            <!-- Header -->
+            <div class="sm:flex sm:items-center mb-8">
+                <div class="sm:flex-auto">
+                    <h1 class="text-2xl font-semibold text-gray-900">
+                        Products
+                    </h1>
+                    <p class="mt-2 text-sm text-gray-700">
+                        A list of all products in your inventory including their
+                        name, price, and current stock levels.
+                    </p>
+                </div>
             </div>
-        </div>
-        <button
-            @click="createProduct"
-            class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
-        >
-            Create Product
-        </button>
-        <!-- Table -->
-        <div class="mt-8 flex flex-col">
-            <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                <div class="inline-block min-w-full py-2 align-middle">
-                    <div
-                        class="overflow-hidden shadow-sm ring-1 ring-black ring-opacity-5 rounded-lg"
-                    >
-                        <table class="min-w-full divide-y divide-gray-300">
-                            <thead class="bg-gray-50">
-                                <tr>
-                                    <th
-                                        scope="col"
-                                        class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
-                                    >
-                                        Name
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                                    >
-                                        Price
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                                    >
-                                        Stock
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        class="relative py-3.5 pl-3 pr-4 sm:pr-6"
-                                    >
-                                        <span class="sr-only">Actions</span>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-gray-200 bg-white">
-                                <tr
-                                    v-for="product in products.data"
-                                    :key="product.id"
-                                    class="hover:bg-gray-50"
+            <button
+                @click="createProduct"
+                class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
+            >
+                Create Product
+            </button>
+            <!-- Table -->
+            <div class="mt-8 flex flex-col">
+                <div class="-mx-4 my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                    <div class="inline-block min-w-full py-2 align-middle">
+                        <div
+                            class="overflow-hidden shadow-sm ring-1 ring-black ring-opacity-5 rounded-lg"
+                        >
+                            <table class="min-w-full divide-y divide-gray-300">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th
+                                            scope="col"
+                                            class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
+                                        >
+                                            Image
+                                        </th>
+                                        <th
+                                            scope="col"
+                                            class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
+                                        >
+                                            Name
+                                        </th>
+                                        <th
+                                            scope="col"
+                                            class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                                        >
+                                            Price
+                                        </th>
+                                        <th
+                                            scope="col"
+                                            class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                                        >
+                                            Stock
+                                        </th>
+                                        <th
+                                            scope="col"
+                                            class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                                        >
+                                            Created At
+                                        </th>
+                                        <th
+                                            scope="col"
+                                            class="relative py-3.5 pl-3 pr-4 sm:pr-6"
+                                        >
+                                            <span class="sr-only">Actions</span>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody
+                                    class="divide-y divide-gray-200 bg-white"
                                 >
-                                    <td
-                                        class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
+                                    <tr
+                                        v-for="product in products.data"
+                                        :key="product.id"
+                                        class="hover:bg-gray-50"
                                     >
-                                        {{ product.name }}
-                                    </td>
-                                    <td
-                                        class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
-                                    >
-                                        {{ product.price }}
-                                    </td>
-                                    <td
-                                        class="whitespace-nowrap px-3 py-4 text-sm"
-                                    >
-                                        <span
-                                            :class="[
-                                                product.stock > 10
-                                                    ? 'text-green-600 bg-green-100'
-                                                    : 'text-red-600 bg-red-100',
-                                                'inline-flex rounded-full px-2 py-1 text-xs font-semibold',
-                                            ]"
+                                        <td
+                                            class="whitespace-nowrap py-1 text-sm font-medium text-gray-900 sm:pl-6"
                                         >
-                                            {{ product.stock }}
-                                        </span>
-                                    </td>
-                                    <td
-                                        class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6"
-                                    >
-                                        <button
-                                            @click="editProduct(product)"
-                                            class="text-indigo-600 hover:text-indigo-900 mr-4"
+                                            <img
+                                                class="w-12 h-auto rounded"
+                                                :src="product.image_url"
+                                                alt=""
+                                            />
+                                        </td>
+                                        <td
+                                            class="whitespace-nowrap py-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
                                         >
-                                            Edit
-                                        </button>
-                                        <button
-                                            @click="deleteProduct(product.id)"
-                                            class="text-red-600 hover:text-red-900"
+                                            {{ product.name }}
+                                        </td>
+                                        <td
+                                            class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
                                         >
-                                            Delete
-                                        </button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                                            {{ product.price }}
+                                        </td>
+
+                                        <td
+                                            class="whitespace-nowrap px-3 py-4 text-sm"
+                                        >
+                                            <span
+                                                :class="[
+                                                    product.stock > 10
+                                                        ? 'text-green-600 bg-green-100'
+                                                        : 'text-red-600 bg-red-100',
+                                                    'inline-flex rounded-full px-2 py-1 text-xs font-semibold',
+                                                ]"
+                                            >
+                                                {{ product.stock }}
+                                            </span>
+                                        </td>
+                                        <td
+                                            class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
+                                        >
+                                            {{
+                                                format(
+                                                    new Date(
+                                                        product.created_at
+                                                    ),
+                                                    "dd MMM yyyy"
+                                                )
+                                            }}
+                                        </td>
+                                        <td
+                                            class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6"
+                                        >
+                                            <button
+                                                @click="editProduct(product)"
+                                                class="text-indigo-600 hover:text-indigo-900 mr-4"
+                                            >
+                                                Edit
+                                            </button>
+                                            <button
+                                                @click="
+                                                    deleteProduct(product.id)
+                                                "
+                                                class="text-red-600 hover:text-red-900"
+                                            >
+                                                Delete
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
+            <!-- ======================================== Pagination =============================================== -->
+            <div v-if="products.current_page" class="">
+                <div class="max-w-none -mx-4 -my-2 sm:-mx-6 lg:-mx-8">
+                    <div class="bg-white overflow-hidden shadow sm:rounded-lg">
+                        <div
+                            class="bg-white px-4 py-3 flex items-center justify-between"
+                        >
+                            <div
+                                class="flex-1 flex justify-between sm:hidden"
+                            />
+                            <div
+                                class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between"
+                            >
+                                <div class="flex items-center space-x-4">
+                                    <!-- Records per page dropdown moved to the left -->
+                                    <div class="flex items-center space-x-2">
+                                        <label
+                                            for="recordsPerPage"
+                                            class="text-sm text-gray-700"
+                                            >Records per page:</label
+                                        >
+                                        <select
+                                            id="recordsPerPage"
+                                            v-model="perPage"
+                                            @change="handlePerPageChange"
+                                            class="border border-gray-300 rounded-md text-sm px-2 py-1 text-gray-700 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+                                        >
+                                            <option value="3">3</option>
+                                            <option value="5">5</option>
+                                            <option value="10">10</option>
+                                        </select>
+                                    </div>
+                                    <!-- Divider between dropdown and results text -->
+                                    <div class="h-4 w-px bg-gray-300"></div>
+                                    <!-- Showing results text -->
+                                    <p
+                                        class="text-sm text-gray-700 text-primary"
+                                    >
+                                        Showing
+                                        <span class="font-medium">{{
+                                            products.from
+                                        }}</span>
+                                        to
+                                        <span class="font-medium">{{
+                                            products.to
+                                        }}</span>
+                                        of
+                                        <span class="font-medium">{{
+                                            products.total
+                                        }}</span>
+                                        results
+                                    </p>
+                                </div>
+                                <div>
+                                    <button
+                                        @click.prevent="updatePageNumber(link)"
+                                        v-for="(link, index) in products.links"
+                                        :key="index"
+                                        :disabled="link.active || !link.url"
+                                        class="relative inline-flex items-center px-4 py-2 border text-sm font-medium"
+                                        :class="{
+                                            'z-10 bg-indigo-50 border-indigo-500 text-indigo-600':
+                                                link.active,
+                                            'bg-white border-gray-300 text-gray-500 hover:bg-gray-50':
+                                                !link.active,
+                                        }"
+                                    >
+                                        <span
+                                            v-html="link.label"
+                                            class="text-primary"
+                                        ></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- ======================================== Pagination Ends Here ===================================== -->
         </div>
-
-        <!-- Pagination -->
-        <div class="mt-6">
-            <pagination
-                :links="products.links"
-                @page="fetchProducts"
-                class="flex justify-center"
-            />
-        </div>
-    </div>
-
+    </AuthenticatedLayout>
     <!-- ==================================== Create or Update Shipment Modal ================================== -->
     <div v-if="showCreateProductModal">
         <!-- Modal backdrop with blur effect -->
@@ -390,8 +501,10 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch, computed, onBeforeUnmount } from "vue";
+import { ref, onBeforeUnmount } from "vue";
 import { useToast } from "vue-toastification";
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+import { format } from "date-fns";
 import axios from "axios";
 
 // Reactive state to hold products
@@ -400,6 +513,8 @@ const showCreateProductModal = ref(false);
 const modalTitle = ref("");
 const toast = useToast();
 const errors = ref({});
+const pageNumber = ref(1);
+const perPage = ref(3);
 const imagePreview = ref(null);
 const initial_form = {
     name: "",
@@ -409,8 +524,6 @@ const initial_form = {
     image: null,
 };
 const form = ref(initial_form);
-
-// Image preview state
 
 // Image upload handler
 const handleImageUpload = (event) => {
@@ -457,10 +570,25 @@ const editProduct = (product) => {
 };
 
 const fetchProducts = () => {
-    axios.get(`/products`).then((response) => {
-        products.value = response.data;
-        console.log(products);
-    });
+    axios
+        .get(`/products`, {
+            params: { page: pageNumber.value, perPage: perPage.value },
+        })
+        .then((response) => {
+            products.value = response.data;
+            console.log(products);
+        });
+};
+
+//pagination
+const updatePageNumber = (link) => {
+    pageNumber.value = link.url.split("=")[1];
+    fetchProducts();
+};
+
+const handlePerPageChange = () => {
+    pageNumber.value = 1; //displays the result from page 1
+    fetchProducts();
 };
 
 const validateForm = () => {

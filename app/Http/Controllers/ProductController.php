@@ -12,8 +12,15 @@ class ProductController extends Controller
     public function index(){
         return Inertia::render('Index');
     }
-    public function fetchProducts(){
-        $products = Product::paginate(3);
+    public function fetchProducts(Request $request){
+        $perPage = $request->perPage;
+        $products = Product::paginate($perPage);
+        $products->getCollection()->transform(function ($product) {
+            $product->image_url = $product->image 
+                ? Storage::url($product->image) 
+                : null; // Generate full URL or set to null if no image
+            return $product;
+        });
         return response()->json($products);
     }
 

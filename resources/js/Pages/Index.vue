@@ -33,6 +33,12 @@
                                             scope="col"
                                             class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
                                         >
+                                            Image
+                                        </th>
+                                        <th
+                                            scope="col"
+                                            class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
+                                        >
                                             Name
                                         </th>
                                         <th
@@ -46,6 +52,12 @@
                                             class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                                         >
                                             Stock
+                                        </th>
+                                        <th
+                                            scope="col"
+                                            class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                                        >
+                                            Created At
                                         </th>
                                         <th
                                             scope="col"
@@ -64,7 +76,16 @@
                                         class="hover:bg-gray-50"
                                     >
                                         <td
-                                            class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
+                                            class="whitespace-nowrap py-1 text-sm font-medium text-gray-900 sm:pl-6"
+                                        >
+                                            <img
+                                                class="w-12 h-auto rounded"
+                                                :src="product.image_url"
+                                                alt=""
+                                            />
+                                        </td>
+                                        <td
+                                            class="whitespace-nowrap py-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
                                         >
                                             {{ product.name }}
                                         </td>
@@ -73,6 +94,7 @@
                                         >
                                             {{ product.price }}
                                         </td>
+
                                         <td
                                             class="whitespace-nowrap px-3 py-4 text-sm"
                                         >
@@ -86,6 +108,18 @@
                                             >
                                                 {{ product.stock }}
                                             </span>
+                                        </td>
+                                        <td
+                                            class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
+                                        >
+                                            {{
+                                                format(
+                                                    new Date(
+                                                        product.created_at
+                                                    ),
+                                                    "dd MMM yyyy"
+                                                )
+                                            }}
                                         </td>
                                         <td
                                             class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6"
@@ -125,28 +159,43 @@
                             <div
                                 class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between"
                             >
-                                <div>
+                                <div class="flex items-center space-x-4">
+                                    <!-- Records per page dropdown moved to the left -->
+                                    <div class="flex items-center space-x-2">
+                                        <label
+                                            for="recordsPerPage"
+                                            class="text-sm text-gray-700"
+                                            >Records per page:</label
+                                        >
+                                        <select
+                                            id="recordsPerPage"
+                                            v-model="perPage"
+                                            @change="handlePerPageChange"
+                                            class="border border-gray-300 rounded-md text-sm px-2 py-1 text-gray-700 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+                                        >
+                                            <option value="3">3</option>
+                                            <option value="5">5</option>
+                                            <option value="10">10</option>
+                                        </select>
+                                    </div>
+                                    <!-- Divider between dropdown and results text -->
+                                    <div class="h-4 w-px bg-gray-300"></div>
+                                    <!-- Showing results text -->
                                     <p
                                         class="text-sm text-gray-700 text-primary"
                                     >
                                         Showing
-                                        <!-- space -->
                                         <span class="font-medium">{{
                                             products.from
                                         }}</span>
-                                        <!-- space -->
                                         to
-                                        <!-- space -->
                                         <span class="font-medium">{{
                                             products.to
                                         }}</span>
-                                        <!-- space -->
                                         of
-                                        <!-- space -->
-                                        <span class="font-medium">
-                                            {{ products.total }}
-                                        </span>
-                                        <!-- space -->
+                                        <span class="font-medium">{{
+                                            products.total
+                                        }}</span>
                                         results
                                     </p>
                                 </div>
@@ -455,7 +504,7 @@
 import { ref, onBeforeUnmount } from "vue";
 import { useToast } from "vue-toastification";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-
+import { format } from "date-fns";
 import axios from "axios";
 
 // Reactive state to hold products
@@ -465,6 +514,7 @@ const modalTitle = ref("");
 const toast = useToast();
 const errors = ref({});
 const pageNumber = ref(1);
+const perPage = ref(3);
 const imagePreview = ref(null);
 const initial_form = {
     name: "",
@@ -521,7 +571,9 @@ const editProduct = (product) => {
 
 const fetchProducts = () => {
     axios
-        .get(`/products`, { params: { page: pageNumber.value } })
+        .get(`/products`, {
+            params: { page: pageNumber.value, perPage: perPage.value },
+        })
         .then((response) => {
             products.value = response.data;
             console.log(products);
@@ -531,6 +583,11 @@ const fetchProducts = () => {
 //pagination
 const updatePageNumber = (link) => {
     pageNumber.value = link.url.split("=")[1];
+    fetchProducts();
+};
+
+const handlePerPageChange = () => {
+    pageNumber.value = 1; //displays the result from page 1
     fetchProducts();
 };
 
