@@ -566,7 +566,13 @@ const editProduct = (product) => {
     errors.value = {};
     modalTitle.value = "Edit";
     showCreateProductModal.value = true;
-    imagePreview.value = null;
+    // Set the image preview if the product has an image
+    if (product.image) {
+        // Assuming the image path is already a full URL or path
+        imagePreview.value = product.image_url;
+    } else {
+        imagePreview.value = null;
+    }
 };
 
 const fetchProducts = () => {
