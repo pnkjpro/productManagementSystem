@@ -674,7 +674,7 @@ const createOrUpdateProduct = () => {
                 .finally((showCreateProductModal.value = false));
         } else {
             axios
-                .post(`/products`, form.value)
+                .post(`/products`, formData)
                 .then((response) => {
                     toast.success("Product Created Successfully!");
                     console.log(response);
